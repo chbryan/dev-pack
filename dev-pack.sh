@@ -15,8 +15,15 @@ sudo apt install -y build-essential git curl wget make cmake unzip zip jq
 # Install containerization
 sudo apt install -y docker.io docker-compose
 
+# Install MySQL repo
+wget https://dev.mysql.com/get/mysql-apt-config_0.8.36-1_all.deb
+echo "mysql-apt-config mysql-apt-config/select-server select mysql-8.0" | sudo debconf-set-selections
+sudo DEBIAN_FRONTEND=noninteractive dpkg -i mysql-apt-config_0.8.36-1_all.deb
+sudo apt update -y
+rm mysql-apt-config_0.8.36-1_all.deb
+
 # Install databases
-sudo apt install -y postgresql mysql-server sqlite3
+sudo DEBIAN_FRONTEND=noninteractive apt install -y postgresql mysql-server sqlite3
 
 # Install editors
 sudo apt install -y vim emacs nano
