@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Script to install and configure dev tools for all popular languages and editors on Ubuntu/Debian
+# Script to install and configure dev tools for all popular languages and editors on Ubuntu/Debian/Raspberry Pi OS
 
 # Exit on error
 set -e
@@ -15,20 +15,13 @@ sudo apt install -y build-essential git curl wget make cmake unzip zip jq
 # Install containerization
 sudo apt install -y docker.io docker-compose
 
-# Install MySQL repo
-wget https://dev.mysql.com/get/mysql-apt-config_0.8.36-1_all.deb
-echo "mysql-apt-config mysql-apt-config/select-server select mysql-8.0" | sudo debconf-set-selections
-sudo DEBIAN_FRONTEND=noninteractive dpkg -i mysql-apt-config_0.8.36-1_all.deb
-sudo apt update -y
-rm mysql-apt-config_0.8.36-1_all.deb
-
-# Install databases
-sudo DEBIAN_FRONTEND=noninteractive apt install -y postgresql mysql-server sqlite3
+# Install databases (use mariadb-server instead of mysql-server for ARM compatibility)
+sudo DEBIAN_FRONTEND=noninteractive apt install -y postgresql mariadb-server sqlite3
 
 # Install editors
 sudo apt install -y vim emacs nano
 
-# Install VSCodium
+# Install VSCodium (check for ARM support; VSCodium has ARM builds)
 wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | gpg --dearmor | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg
 echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium stable' | sudo tee /etc/apt/sources.list.d/vscodium.list
 sudo apt update -y
@@ -84,7 +77,7 @@ sudo apt install -y lua5.3
 # Install Perl
 sudo apt install -y perl
 
-# Install Swift (requires additional repo)
+# Install Swift (requires additional repo; check ARM support)
 sudo apt install -y gnupg
 wget -qO- https://archive.swiftlang.xyz/install.sh | sudo bash -
 sudo apt install -y swiftlang
